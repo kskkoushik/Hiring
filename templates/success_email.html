@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Sent!</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f8ff; /* Light Blue */
+        color: #333;
+      }
+
+      .container {
+        text-align: center;
+        margin-top: 20vh;
+      }
+
+      h1 {
+        color: #2e8b57; /* Sea Green */
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        transition: transform 0.5s ease-in-out;
+      }
+
+      h1:hover {
+        transform: rotate(5deg);
+      }
+
+      p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+      }
+
+      .inbox-link {
+        color: #2e8b57; /* Sea Green */
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease-in-out;
+      }
+
+      .inbox-link:hover {
+        color: #228b22; /* Forest Green */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Email Sent!</h1>
+      <p>
+        A confirmation email containing the skill test link has been sent to
+        your inbox.
+      </p>
+      <p>Please check your inbox and follow the instructions.</p>
+      <p>If you haven't received the email, please check your spam folder.</p>
+      <p>
+        Once you've received the email,
+        <a class="inbox-link" href="#">click here</a> to proceed to the test.
+      </p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MCQ Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #56ccf2, #2f80ed);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 400px;
+        padding: 20px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #2f80ed;
+      }
+
+      .question {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .options {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .options li {
+        margin: 10px 0;
+      }
+
+      .options input[type="radio"] {
+        display: none;
+      }
+
+      .options label {
+        display: block;
+        padding: 10px;
+        background: #56ccf2;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.3s;
+      }
+
+      .options input[type="radio"]:checked + label {
+        background: #2f80ed;
+        transform: scale(1.05);
+      }
+
+      .options label:hover {
+        background: #2f80ed;
+      }
+
+      .submit-btn {
+        background: #27ae60;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.3s;
+      }
+
+      .submit-btn:hover {
+        background: #219653;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>MCQ Test</h1>
+      <form action="/submit_test" method="post">
+        {% for question in questions %}
+        <div class="question">
+          <p>{{question['question']}}</p>
+        </div>
+        <ul class="options">
+          <li>
+            <input
+              type="radio"
+              id="option1-{{loop.index}}"
+              name="mcq-{{loop.index}}"
+              value="A**"
+            />
+            <label for="option1-{{loop.index}}"
+              >{{question['choices']['A']}}</label
+            >
+          </li>
+          <li>
+            <input
+              type="radio"
+              id="option2-{{loop.index}}"
+              name="mcq-{{loop.index}}"
+              value="B**"
+            />
+            <label for="option2-{{loop.index}}"
+              >{{question['choices']['B']}}</label
+            >
+          </li>
+          <li>
+            <input
+              type="radio"
+              id="option3-{{loop.index}}"
+              name="mcq-{{loop.index}}"
+              value="C**"
+            />
+            <label for="option3-{{loop.index}}"
+              >{{question['choices']['C']}}</label
+            >
+          </li>
+          <li>
+            <input
+              type="radio"
+              id="option4-{{loop.index}}"
+              name="mcq-{{loop.index}}"
+              value="D**"
+            />
+            <label for="option4-{{loop.index}}"
+              >{{question['choices']['D']}}</label
+            >
+          </li>
+        </ul>
+        {% endfor %}
+        <input type="hidden" name="default_value" id="default_value" />
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </div>
+    <script>
+      // Extract the last part of the URL
+      var pathArray = window.location.pathname.split("/");
+      var lastSegment = pathArray[pathArray.length - 1];
+
+      // Set the value of the hidden input field
+      document.getElementById("default_value").value = lastSegment;
+    </script>
+  </body>
+</html>
