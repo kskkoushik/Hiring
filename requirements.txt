@@ -1,7 +1,6 @@
 flask
 Flask-Mail
 pymongo
-smtplib
 PyPDF2
 google-generativeai
 python-dotenv
