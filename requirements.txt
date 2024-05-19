@@ -2,6 +2,5 @@ flask
 Flask-Mail
 pymongo
 PyPDF2
-google-generativeai
 python-dotenv
 gunicorn
