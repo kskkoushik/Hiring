@@ -11,9 +11,10 @@ from email.mime.text import MIMEText
 
 
 # Define the schema for the desired output
+app = Flask(__name__)
 
 # Create a Gemini model instance
-genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
+genai.configure(api_key= "AIzaSyDXInMq_3VVc96niTrRjp2RLpWFhl_09mY")
 model = genai.GenerativeModel("gemini-pro")
 
 
@@ -158,7 +159,7 @@ def pdf_text_extractor(uploaded_file):
 
 
 
-app = Flask(__name__)
+
 
 def send_mail(username , mail_address):
     try:
