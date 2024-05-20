@@ -14,7 +14,7 @@ db = member['Hiring_base']
 username = db['username']
 
 def add_data(name , email , skills , questions):
-    username.insert_one({"name":name,"email":email,"skills":skills , 'score':0 , 'questions':questions})
+    username.insert_one({"name":name,"email":email,"skills":skills , 'proficiency' : [] ,'score':0 , 'questions':questions})
     return "data added";
 
 def get_user_data(name):
@@ -23,3 +23,13 @@ def get_user_data(name):
 def update_score(name, score):
     username.update_one({'name':name},{'$set':{'score':score}})
     return "score updated";
+
+def update_proficiency(name, proficiency):
+    username.update_one({'name':name},{'$set':{'proficiency':proficiency}})
+    return "proficiency updated";
+
+def update_questions(name, questions):
+    username.update_one({'name':name},{'$set':{'proficiency':questions}})
+    return "questions updated";
+
+

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rate Us Slider</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #4facfe, #00f2fe);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 300px;
+      }
+
+      h2 {
+        color: #4facfe;
+        margin-bottom: 20px;
+      }
+
+      .slider-label {
+        font-size: 16px;
+        margin: 10px 0;
+        color: #333;
+      }
+
+      .slider {
+        width: 100%;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 10px;
+        background: #ddd;
+        outline: none;
+        border-radius: 5px;
+        transition: background 0.3s;
+      }
+
+      .slider:hover {
+        background: #b3e6fc;
+      }
+
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #00f2fe;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: background 0.3s;
+      }
+
+      .slider::-webkit-slider-thumb:hover {
+        background: #4facfe;
+      }
+
+      .slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #00f2fe;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: background 0.3s;
+      }
+
+      .slider::-moz-range-thumb:hover {
+        background: #4facfe;
+      }
+
+      .submit-btn {
+        background: #4facfe;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+        transition: background 0.3s;
+      }
+
+      .submit-btn:hover {
+        background: #00f2fe;
+      }
+
+      .values {
+        display: flex;
+        justify-content: space-between;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Rate Us</h2>
+      <form action="/proficiency_data" method="POST">
+        {% for skill in skills %}
+        <div class="slider-label">{{skill}}</div>
+        <input
+          type="range"
+          min="1"
+          max="4"
+          value="2"
+          class="slider"
+          id="functionalitySlider"
+          name="{{loop.index}}"
+        />
+        <div class="values">
+          <span>Poor</span><span>Fair</span><span>Good</span
+          ><span>Excellent</span>
+        </div>
+
+        {% endfor %}
+        <input
+          type="hidden"
+          name="default_value"
+          id="default_value"
+          value="{{name}}"
+        />
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>

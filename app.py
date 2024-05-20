@@ -3,7 +3,7 @@ import google.generativeai as genai
 import os
 import PyPDF2
 import re
-from mdb import add_data , get_user_data , update_score
+from mdb import add_data , get_user_data , update_score , update_proficiency , update_questions 
 import smtplib
 from flask_mail import Mail, Message
 from email.mime.text import MIMEText
@@ -209,7 +209,16 @@ def send_mail_score(username , mail_address ,score):
         print(f"Error: {e}")
         print("Failed to send email")
 
-
+def level_analyze(num):
+    num = int(num)
+    if num == 1:
+        return "beginner"
+    elif num == 2:
+        return "intermediate"
+    elif num == 3:
+        return "advanced"
+    else:
+        return "expert"
 
       
 @app.route('/')
@@ -226,19 +235,11 @@ def get_data():
     skills = extract_skills(resume_data)
     list_skills = parse_skills(skills)
 
-    for skill in list_skills:
-         questions = (genrate_questions(skill , 'intermediate' , '2' ))
-         questions_list.extend(parse_questions(questions))
-
     status = add_data(name , mail , list_skills , questions_list)
     if status != "data added":
-         return "DATA not added resbmit the form"
-    
-    email_status = send_mail(name , mail) #add email functionality here 
-    if email_status == "Email sent successfully":
-         return render_template("success_email.html")
+         return render_template('error_page.html')
     else :
-         return render_template("error_page.html")
+        return render_template('proficiency.html' , skills = list_skills , name = name)
 
 @app.route('/skill_test/<name>')
 def test(name):
@@ -267,8 +268,37 @@ def result():
      score_status = update_score(user_name , score)
      if score_status == "score updated":
         score_mail = send_mail_score(user_name ,email , score)
-        return render_template('congrats.html', score=score)           
-              
+        return render_template('congrats.html', score=score)
+
+@app.route('/proficiency_data' , methods = ['POST'])
+def add_proficiency_data():
+
+    questions_list = []
+    proficiency = []
+    name = request.form['default_value']
+    user = get_user_data(name)
+    mail_address = user['email']
+    list_skills = user['skills']
+    i = 0
+    for i in range(len(list_skills)):
+        p = request.form[f'{i+1}']
+        proficiency.append(p)                
+
+    proficiency_status = update_proficiency(name , proficiency)
+    user = get_user_data(name)
+    i = 0
+    for i in range(len(list_skills)):
+         skill = list_skills[i]
+         level = level_analyze(user['proficiency'][i])
+         questions = (genrate_questions(skill , level , '2' ))
+         questions_list.extend(parse_questions(questions))
+    
+    question_status = update_questions(name , questions_list)
+    if proficiency_status == "proficiency updated":
+        send_mail(name, mail_address)
+        return render_template('success_email.html') 
+    else:
+        return render_template('error_page.html')         
           
 
 if __name__ == '__main__':
