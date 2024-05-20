@@ -76,6 +76,65 @@ Which of the following data structures is best suited for storing a list of uniq
     response = model.generate_content(prompt)
     return response.text
 
+def genrate_questions_logical_test(number ):
+   
+    prompt = "Generate " + number + " mcqs on  such that each question contains 4 options and 1 answers , these questions are for analyzing logical capabilites of " + """ programmers and this is the format of the questions you should follow : 
+**Question 1:**
+
+Which of the following is NOT a method of the `argparse` module for parsing command-line arguments?
+
+(A) `add_argument()`
+(B) `parse_args()`
+(C) `add_parser()`
+(D) `get_args()`
+
+**Answer: D**
+
+**Question 2:**
+
+What is the purpose of the `yield` keyword in a generator function?
+
+(A) To pause the execution of the function and return the current value
+(B) To iterate over a sequence of values
+(C) To define a new variable within the function
+(D) To terminate the execution of the function
+
+**Answer: A**
+
+**Question 3:**
+
+Which of the following is a benefit of using decorators in Python?
+
+(A) To add functionality to existing functions without modifying the source code
+(B) To create new classes from existing classes
+(C) To improve code readability
+(D) To speed up program execution
+
+**Answer: A**
+
+**Question 4:**
+
+What is the difference between a class and an object in Python?
+
+(A) A class is a template for creating objects, while an object is an instance of a class.
+(B) An object is a template for creating classes, while a class is an instance of an object.
+(C) A class and an object are both the same thing.
+(D) A class is a variable, while an object is a value.
+
+**Answer: A**
+
+**Question 5:**
+
+Which of the following data structures is best suited for storing a list of unique elements?
+
+(A) List
+(B) Tuple
+(C) Set
+(D) Dictionary""" 
+    response = model.generate_content(prompt)
+    return response.text
+
+
 def extract_skills(resume_text):
     
     prompt = """Generate 5 mcqs on python such that each question contains 4 options and 1 answers , these questions are for intermediate python programmers """

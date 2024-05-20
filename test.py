@@ -129,22 +129,67 @@ def parse_skills(skill_string):
 
 genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
 model = genai.GenerativeModel("gemini-pro")
-prompt = """Generate 5 mcqs on python such that each question contains 4 options and 1 answers , these questions are for intermediate python programmers """
 #response = model.generate_content(prompt)
 
-prompt1 = """you are a human resource manager and should extract skills form the given resume text and reutrn them in the below format
+prompt = "Generate " + "10" + " mcqs on  such that each question contains 4 options and 1 answers , these questions are for analyzing logical capabilites of " + """ students and this is the format of the questions you should follow : 
+**Question 1:**
 
-            format : 
-               1) skill1
-               2) skill2
-               3) skill3
-               4) skill4
-               5) skill5
-               and so on... 
-               here is the resume data """ + resume_text + """
-               use this data to extract skills"""
+Which of the following is NOT a method of the `argparse` module for parsing command-line arguments?
 
-response = model.generate_content(prompt1)
+(A) `add_argument()`
+(B) `parse_args()`
+(C) `add_parser()`
+(D) `get_args()`
+
+**Answer: D**
+
+**Question 2:**
+
+What is the purpose of the `yield` keyword in a generator function?
+
+(A) To pause the execution of the function and return the current value
+(B) To iterate over a sequence of values
+(C) To define a new variable within the function
+(D) To terminate the execution of the function
+
+**Answer: A**
+
+**Question 3:**
+
+Which of the following is a benefit of using decorators in Python?
+
+(A) To add functionality to existing functions without modifying the source code
+(B) To create new classes from existing classes
+(C) To improve code readability
+(D) To speed up program execution
+
+**Answer: A**
+
+**Question 4:**
+
+What is the difference between a class and an object in Python?
+
+(A) A class is a template for creating objects, while an object is an instance of a class.
+(B) An object is a template for creating classes, while a class is an instance of an object.
+(C) A class and an object are both the same thing.
+(D) A class is a variable, while an object is a value.
+
+**Answer: A**
+
+**Question 5:**
+
+Which of the following data structures is best suited for storing a list of unique elements?
+
+(A) List
+(B) Tuple
+(C) Set
+(D) Dictionary
+
+
+
+above given questions are sample questions you should provide questions to test logical capability of student without involving programming knowledge and using their critical thinking features """ 
+
+response = model.generate_content(prompt)
 print(response.text)
 print("================================================================================================================================")
-print(parse_skills(response.text))
+
