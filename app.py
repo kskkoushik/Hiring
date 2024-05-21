@@ -1,12 +1,13 @@
-from flask import Flask , render_template , request
+from flask import Flask , render_template , request , redirect , url_for
 import google.generativeai as genai
 import os
 import PyPDF2
 import re
-from mdb import add_data , get_user_data , update_score , update_proficiency , update_questions 
+from mdb import add_data , get_user_data , update_score , update_proficiency , update_questions , update_logic_questions , update_reason_questions , update_verbal_questions , update_l_score , update_r_score , update_v_score , update_inter_chat
 import smtplib
 from flask_mail import Mail, Message
 from email.mime.text import MIMEText
+from interview import interview_engine
 
 
 
@@ -78,7 +79,7 @@ Which of the following data structures is best suited for storing a list of uniq
 
 def genrate_questions_logical_test(number ):
    
-    prompt = "Generate " + number + " mcqs on  such that each question contains 4 options and 1 answers , these questions are for analyzing logical capabilites of " + """ programmers and this is the format of the questions you should follow : 
+    prompt = "Generate " + number + " mcqs on  such that each question contains 4 options and 1 answers , these questions are for analyzing logical capabilites of " + """ students and this is the format of the questions you should follow : 
 **Question 1:**
 
 Which of the following is NOT a method of the `argparse` module for parsing command-line arguments?
@@ -130,9 +131,146 @@ Which of the following data structures is best suited for storing a list of uniq
 (A) List
 (B) Tuple
 (C) Set
-(D) Dictionary""" 
+(D) Dictionary
+
+
+
+above given questions are sample questions you should provide questions to test logical capability of student without involving programming knowledge and using their critical thinking features """ 
+
     response = model.generate_content(prompt)
     return response.text
+
+def genrate_questions_reasoning_test(number ):
+   
+    prompt = "Generate " + number + " mcqs on  such that each question contains 4 options and 1 answers , these questions are for analyzing reasoning and aptitude capabilites of " + """ students and this is the format of the questions you should follow : 
+**Question 1:**
+
+Which of the following is NOT a method of the `argparse` module for parsing command-line arguments?
+
+(A) `add_argument()`
+(B) `parse_args()`
+(C) `add_parser()`
+(D) `get_args()`
+
+**Answer: D**
+
+**Question 2:**
+
+What is the purpose of the `yield` keyword in a generator function?
+
+(A) To pause the execution of the function and return the current value
+(B) To iterate over a sequence of values
+(C) To define a new variable within the function
+(D) To terminate the execution of the function
+
+**Answer: A**
+
+**Question 3:**
+
+Which of the following is a benefit of using decorators in Python?
+
+(A) To add functionality to existing functions without modifying the source code
+(B) To create new classes from existing classes
+(C) To improve code readability
+(D) To speed up program execution
+
+**Answer: A**
+
+**Question 4:**
+
+What is the difference between a class and an object in Python?
+
+(A) A class is a template for creating objects, while an object is an instance of a class.
+(B) An object is a template for creating classes, while a class is an instance of an object.
+(C) A class and an object are both the same thing.
+(D) A class is a variable, while an object is a value.
+
+**Answer: A**
+
+**Question 5:**
+
+Which of the following data structures is best suited for storing a list of unique elements?
+
+(A) List
+(B) Tuple
+(C) Set
+(D) Dictionary
+
+
+
+above given questions are sample questions you should provide questions to test reasoning capability of student without involving programming knowledge and using their critical thinking features """ 
+
+    response = model.generate_content(prompt)
+    return response.text
+
+
+def genrate_questions_verbal_test(number ):
+   
+    prompt = "Generate " + number + " mcqs on  such that each question contains 4 options and 1 answers , these questions are for analyzing verbal and speech capabilites of " + """ students and this is the format of the questions you should follow : 
+**Question 1:**
+
+Which of the following is NOT a method of the `argparse` module for parsing command-line arguments?
+
+(A) `add_argument()`
+(B) `parse_args()`
+(C) `add_parser()`
+(D) `get_args()`
+
+**Answer: D**
+
+**Question 2:**
+
+What is the purpose of the `yield` keyword in a generator function?
+
+(A) To pause the execution of the function and return the current value
+(B) To iterate over a sequence of values
+(C) To define a new variable within the function
+(D) To terminate the execution of the function
+
+**Answer: A**
+
+**Question 3:**
+
+Which of the following is a benefit of using decorators in Python?
+
+(A) To add functionality to existing functions without modifying the source code
+(B) To create new classes from existing classes
+(C) To improve code readability
+(D) To speed up program execution
+
+**Answer: A**
+
+**Question 4:**
+
+What is the difference between a class and an object in Python?
+
+(A) A class is a template for creating objects, while an object is an instance of a class.
+(B) An object is a template for creating classes, while a class is an instance of an object.
+(C) A class and an object are both the same thing.
+(D) A class is a variable, while an object is a value.
+
+**Answer: A**
+
+**Question 5:**
+
+Which of the following data structures is best suited for storing a list of unique elements?
+
+(A) List
+(B) Tuple
+(C) Set
+(D) Dictionary
+
+
+
+above given questions are sample questions you should provide questions to test verabl and speech capability of student without involving programming knowledge and using their english language grammar skills """ 
+
+    response = model.generate_content(prompt)
+    return response.text
+
+
+
+
+
 
 
 def extract_skills(resume_text):
@@ -153,7 +291,7 @@ def extract_skills(resume_text):
                 use this data to extract skills"""
 
     response = model.generate_content(prompt1)
-    return response.text    
+    return response.text
 
 
 def parse_questions(string):
@@ -244,14 +382,19 @@ def send_mail(username , mail_address):
         print(f"Error: {e}")
         print("Failed to send email")
 
-def send_mail_score(username , mail_address ,score):
+def send_mail_score(username , mail_address ,s_score , l_score , r_score , v_score ):
     try:
         sender_email = "kskkoushik135@outlook.com"
         receiver_email = mail_address
         password = "KSKkoushik789..."
 
         message = MIMEText(f""" HIRE-AI Assesment Test score \n
-                            Dear ,{username} you scored {score} in the Hire-AI skill Assessment test
+                            Dear ,{username} ,
+                            Here is the score of your Hire-AI skill Assessment test \n
+                            skill test - {s_score} \n
+                            logical test - {l_score} \n
+                            reasoning test - {r_score} \n
+                            verbal test - {v_score} \n
                             All the best """)
         message['From'] = sender_email
         message['To'] = receiver_email
@@ -284,6 +427,27 @@ def level_analyze(num):
 def index():
     return render_template('index.html')
 
+def logic_redi(name):
+
+    user = get_user_data(name)
+    questions  = user['logic_quest']
+    return redirect(url_for('logic_test', name=name))
+
+def reason_redi(name):
+
+    user = get_user_data(name)
+    questions  = user['reason_quest']
+    return redirect(url_for('reason_test', name=name))
+
+
+def  verbal_redi(name):
+
+    user = get_user_data(name)
+    questions  = user['verbal_quest']
+    return redirect(url_for('verbal_test', name=name))
+    
+
+
 @app.route('/get_data', methods=['POST'])
 def get_data():
     questions_list = []
@@ -301,12 +465,37 @@ def get_data():
         return render_template('proficiency.html' , skills = list_skills , name = name)
 
 @app.route('/skill_test/<name>')
-def test(name):
+def skill_test(name):
      
      user_data = get_user_data(name)
      questions = user_data['questions']    
 
-     return render_template('test.html', questions=questions)
+     return render_template('test.html', questions=questions , test_type = 'skill')
+
+@app.route('/logic_test/<name>')
+def logic_test(name):
+     
+     user_data = get_user_data(name)
+     questions = user_data['logic_quest']    
+
+     return render_template('test.html', questions=questions , test_type = 'logic')
+
+@app.route('/reason_test/<name>')
+def reason_test(name):
+     
+     user_data = get_user_data(name)
+     questions = user_data['reason_quest']    
+
+     return render_template('test.html', questions=questions , test_type = 'reason')
+
+
+@app.route('/verbal_test/<name>')
+def verbal_test(name):
+     
+     user_data = get_user_data(name)
+     questions = user_data['verbal_quest']    
+
+     return render_template('test.html', questions=questions , test_type = 'verbal')
 
 
 @app.route('/submit_test', methods=['POST'])
@@ -314,21 +503,53 @@ def result():
      
      user_name = request.form['default_value']
      user_data = get_user_data(user_name)
+     test_type = request.form['test_type']
      email = user_data['email']
-     questions = user_data['questions']
+
+     if test_type == 'skill':
+        questions = user_data['questions']
+     elif test_type == 'logic':
+         questions = user_data['logic_quest']
+     elif test_type == 'reason':
+         questions = user_data['reason_quest']
+     else:
+         questions = user_data['verbal_quest']           
+
+    
      score = 0
      i = 0
+     score_status = ''
      for i in range(len(questions)):
           
           selected_answer = request.form.get(f'mcq-{i+1}')
           if questions[i]['answer'] == selected_answer:
                score = score+1
-
-     score_status = update_score(user_name , score)
-     if score_status == "score updated":
-        score_mail = send_mail_score(user_name ,email , score)
-        return render_template('congrats.html', score=score)
-
+     if test_type == 'skill':
+        score_status = update_score(user_name , score)
+     elif test_type == 'logic':
+         score_status = update_l_score(user_name , score)   
+     elif test_type == 'reason':
+         score_status = update_r_score(user_name , score)
+     else:
+         score_status = update_v_score(user_name , score)    
+     
+     
+     if score_status == "score updated" and test_type == 'skill':
+        return logic_redi(user_name)
+     elif score_status == "score updated" and test_type == 'logic':
+        return reason_redi(user_name)
+     elif score_status == "score updated" and test_type =='reason':
+        return verbal_redi(user_name)  
+     elif score_status == "score updated" and test_type == 'verbal':
+       user_data = get_user_data(user_name)
+       s_score  = user_data['s_score']
+       l_score  = user_data['l_score']
+       r_score  = user_data['r_score']
+       v_score  = user_data['v_score']
+       mail_status = send_mail_score(user_name , email , s_score ,l_score, r_score , v_score)
+       if mail_status == 'Email sent successfully':
+           return render_template('congrats.html')
+       
 @app.route('/proficiency_data' , methods = ['POST'])
 def add_proficiency_data():
 
@@ -353,11 +574,37 @@ def add_proficiency_data():
          questions_list.extend(parse_questions(questions))
     
     question_status = update_questions(name , questions_list)
+    logical = genrate_questions_logical_test('1')
+    reasoning = genrate_questions_reasoning_test('1')
+    verbal = genrate_questions_logical_test('1')
+    logic_li = parse_questions(logical)
+    reason_li = parse_questions(reasoning)
+    verb_li = parse_questions(verbal)
+    l_status = update_logic_questions(name , logic_li)
+    r_status = update_reason_questions(name , reason_li)
+    v_status = update_verbal_questions(name , verb_li)
     if proficiency_status == "proficiency updated":
         send_mail(name, mail_address)
         return render_template('success_email.html') 
     else:
-        return render_template('error_page.html')         
+        return render_template('error_page.html')
+
+
+@app.route('/interview/<role>/<username>')
+def interview(role , username):
+        return render_template('interview.html', response = 'start by greeting the AI' , username = username ,  role = role)
+   
+
+@app.route('/interview_submit' , methods=['POST'])
+def interview_submit():
+    username = request.form['username']
+    role = request.form['role']
+    user = get_user_data(username)
+    history = user['inter_chat']
+    input = request.form['input']
+    response = interview_engine(input , history , username , role)
+    return render_template('interview.html',  response = response, username = username , role = role)
+        
           
 
 if __name__ == '__main__':

@@ -13,15 +13,27 @@ db = member['Hiring_base']
 
 username = db['username']
 
-def add_data(name , email , skills , questions):
-    username.insert_one({"name":name,"email":email,"skills":skills , 'proficiency' : [] ,'score':0 , 'questions':questions})
+def add_data(name , email , skills , questions ):
+    username.insert_one({"name":name,"email":email,"skills":skills , 'proficiency' : [] ,'s_score':0 , 'questions':questions , 'logic_quest':[] ,'l_score':0 , 'reason_quest': [] , 'r_score':0 ,'verbal_quest':[] , 'v_score':0 , 'inter_chat':[]})
     return "data added";
 
 def get_user_data(name):
     return username.find_one({'name':name})
 
 def update_score(name, score):
-    username.update_one({'name':name},{'$set':{'score':score}})
+    username.update_one({'name':name},{'$set':{'s_score':score}})
+    return "score updated";
+
+def update_l_score(name, score):
+    username.update_one({'name':name},{'$set':{'l_score':score}})
+    return "score updated";
+
+def update_r_score(name, score):
+    username.update_one({'name':name},{'$set':{'r_score':score}})
+    return "score updated";
+
+def update_v_score(name, score):
+    username.update_one({'name':name},{'$set':{'v_score':score}})
     return "score updated";
 
 def update_proficiency(name, proficiency):
@@ -29,7 +41,23 @@ def update_proficiency(name, proficiency):
     return "proficiency updated";
 
 def update_questions(name, questions):
-    username.update_one({'name':name},{'$set':{'proficiency':questions}})
+    username.update_one({'name':name},{'$set':{'questions':questions}})
     return "questions updated";
+
+def update_logic_questions(name, questions):
+    username.update_one({'name':name},{'$set':{'logic_quest':questions}})
+    return "l questions updated";
+
+def update_reason_questions(name, questions):
+    username.update_one({'name':name},{'$set':{'reason_quest':questions}})
+    return "r questions updated";
+
+def update_verbal_questions(name, questions):
+    username.update_one({'name':name},{'$set':{'verbal_quest':questions}})
+    return "v questions updated";
+
+def update_inter_chat(name, chat):
+    username.update_one({'name':name},{'$set':{'inter_chat':chat}})
+    return "chat updated";
 
 

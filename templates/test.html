@@ -85,7 +85,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>MCQ Test</h1>
+      <h1>{{test_type}} Test</h1>
       <form action="/submit_test" method="post">
         {% for question in questions %}
         <div class="question">
@@ -139,6 +139,7 @@
         </ul>
         {% endfor %}
         <input type="hidden" name="default_value" id="default_value" />
+        <input type="hidden" name="test_type" value="{{ test_type }}" />
         <button type="submit" class="submit-btn">Submit</button>
       </form>
     </div>

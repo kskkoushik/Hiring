@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Interview</title>
+
+    <style>
+      body {
+        background: linear-gradient(135deg, #00b4db, #0083b0);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: "Arial", sans-serif;
+      }
+
+      .container {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 1.5s ease-in-out;
+        width: 60%;
+      }
+
+      .heading {
+        font-size: 3em;
+        color: #005f73;
+        margin-bottom: 30px;
+      }
+
+      .question-block {
+        margin-bottom: 30px;
+      }
+
+      .question {
+        font-size: 1.5em;
+        color: #0a9396;
+      }
+
+      .answer-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .answer-block {
+        margin-bottom: 30px;
+        width: 100%;
+      }
+
+      .answer-input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #0a9396;
+        border-radius: 10px;
+        font-size: 1.2em;
+        transition: all 0.3s ease;
+        resize: none;
+      }
+
+      .answer-input:focus {
+        border-color: #3a86ff;
+        box-shadow: 0 0 10px rgba(58, 134, 255, 0.5);
+        outline: none;
+      }
+
+      .submit-button {
+        padding: 15px 30px;
+        background-color: #3a86ff;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .submit-button:hover {
+        background-color: #0077b6;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="heading">AI Interview</h1>
+      <div class="question-block">
+        <p class="question">{{response}}</p>
+      </div>
+      <form class="answer-form" action="/interview_submit" method="post">
+        <div class="answer-block">
+          <textarea
+            class="answer-input"
+            rows="4"
+            placeholder="Type your answer here..."
+            name="input"
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="submit-button">Submit</button>
+        <input
+          type="hidden"
+          name="username"
+          id="default_value"
+          value="{{username}}"
+        />
+        <input type="hidden" name="role" id="default_value" value="{{role}}" />
+      </form>
+    </div>
+  </body>
+</html>
