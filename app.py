@@ -3,7 +3,7 @@ import google.generativeai as genai
 import os
 import PyPDF2
 import re
-from mdb import add_data , get_user_data , update_score , update_proficiency , update_questions , update_logic_questions , update_reason_questions , update_verbal_questions , update_l_score , update_r_score , update_v_score , update_inter_chat
+from mdb import add_data , get_user_data , update_score , update_proficiency , update_questions , update_logic_questions , update_reason_questions , update_verbal_questions , update_l_score , update_r_score , update_v_score , get_all_data , update_inter_chat , add_job_posting
 import smtplib
 from flask_mail import Mail, Message
 from email.mime.text import MIMEText
@@ -605,7 +605,31 @@ def interview_submit():
     response = interview_engine(input , history , username , role)
     return render_template('interview.html',  response = response, username = username , role = role)
         
-          
+@app.route('/adminstration/view_data/<password>')
+def get_application_data(password):
+
+    if password == 'hire_aiaz':
+        data = get_all_data()
+        return render_template('view_data.html', data = data)
+    else:
+        return render_template('error_page.html')
+
+@app.route('/adminstration/job_posting/<password>')
+def redirect_post_job(password):
+    if password == 'hire_aiaz':
+        return render_template('job_posting.html')
+    else:
+        return render_template('error_page.html')
+    
+
+@app.route('/add_job_to_db' , methods = ['POST'])
+def job_post():
+    title = request.form['title']
+    description = request.form['description']
+    skills = request.form['skills']
+    job_post_status = add_job_posting(title, description , skills )
+    if job_post_status == 'job added':
+        return "Job post added successfully"  
 
 if __name__ == '__main__':
     app.run(debug=True)

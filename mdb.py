@@ -13,6 +13,8 @@ db = member['Hiring_base']
 
 username = db['username']
 
+job_postings = db['job_postings']
+
 def add_data(name , email , skills , questions ):
     username.insert_one({"name":name,"email":email,"skills":skills , 'proficiency' : [] ,'s_score':0 , 'questions':questions , 'logic_quest':[] ,'l_score':0 , 'reason_quest': [] , 'r_score':0 ,'verbal_quest':[] , 'v_score':0 , 'inter_chat':[]})
     return "data added";
@@ -61,3 +63,9 @@ def update_inter_chat(name, chat):
     return "chat updated";
 
 
+def get_all_data():
+    return username.find()
+
+def add_job_posting(job_title , job_description , job_skills):
+    job_postings.insert_one({"job_title":job_title,"job_description":job_description,"job_skills":job_skills})
+    return "job added";
